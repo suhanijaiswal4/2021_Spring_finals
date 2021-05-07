@@ -6,9 +6,16 @@ pd.options.plotting.backend = "plotly"
 
 def clean_global_data(filename: str) -> pd.DataFrame:
     """
+    Function to clean global data file
+    :param filename: Filename for global data file
+    :return: Cleaned dataframe
 
-    :param filename:
-    :return:
+    >>> test_data = clean_global_data("global-child-mortality-timeseries.csv")
+    >>> test_data.columns.to_list()
+    ['Entity', 'Code', 'Year', 'Percentage_surviving_in_first_5_years', 'Percentage_dying_in_first_5_years']
+    >>> test_data.size
+    285
+
     """
     global_child_mortality_data = pd.read_csv(filename)
     global_child_mortality_data.drop_duplicates(inplace=True)
@@ -21,9 +28,9 @@ def clean_global_data(filename: str) -> pd.DataFrame:
 
 def plot_year_mortality(dataframe: str):
     """
-
-    :param dataframe:
-    :return:
+    PLot the bar chart
+    :param dataframe: Global dataframe having mortality rate and survivng rate
+    :return: None
     """
     fig, ax = plt.subplots(figsize=(15, 10))
     ax.bar(dataframe['Year'], dataframe['Percentage_surviving_in_first_5_years'],
@@ -36,9 +43,15 @@ def plot_year_mortality(dataframe: str):
 
 def clean_country(filename: str) -> pd.DataFrame:
     """
+    Function to clean file of gdp and mortality rate
+    :param filename: Filename of csv contaning GDP and mortality
+    :return: Cleaned dataframe with GDP and mortality rate
 
-    :param filename:
-    :return:
+    >>> test_data = clean_country("country_data.csv")
+    >>> test_data.columns.to_list()
+    ['Country', 'Infant mortality (per 1000 births)', 'GDP ($ per capita)']
+    >>> test_data.size
+    672
     """
     country_data = pd.read_csv(filename)
     country_data = country_data[['Country', 'Infant mortality (per 1000 births)', 'GDP ($ per capita)']]
@@ -52,9 +65,13 @@ def clean_country(filename: str) -> pd.DataFrame:
 
 def health_clean(filename: str) -> pd.DataFrame:
     """
+    Clean the file containing health expenditure
+    :param filename: File name of health expenditure data
+    :return: Dataframe containing healthcare expenditure for multiple countries and years
 
-    :param filename:
-    :return:
+    >>> test_data = health_clean('Health expenditure.csv')
+    >>> test_data.shape
+    (4415, 4)
     """
     Health_expenditure = pd.read_csv(filename, skiprows=4)
     Health_expenditure = Health_expenditure.drop(
@@ -70,10 +87,10 @@ def health_clean(filename: str) -> pd.DataFrame:
 
 def country_plot(expenditure_mortality: pd.DataFrame, code_name: str):
     """
-
-    :param expenditure_mortality:
-    :param code_name:
-    :return:
+    Plot a scatter plot for expenditure vs mortality rate
+    :param expenditure_mortality: Dataframe containing healthcare expenditure and mortality rate
+    :param code_name: Country code for which plot has to be made
+    :return: None
     """
     selected = expenditure_mortality[expenditure_mortality['Country Code'] == code_name]
     fig = selected.plot.scatter(x='Health Expenditure', y='Mortality rate, under-5 (per 1,000 live births)',
